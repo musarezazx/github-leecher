@@ -41,7 +41,7 @@ jobs:
           echo "Original filename will be used for archive: $ORIGINAL_NAME"
           echo "::set-output name=original_name::$ORIGINAL_NAME" # برای استفاده در مراحل بعدی
 
-      - name: Create password-protected multi-part archive (95MB chunks)
+      - name: Create password-protected multi-part archive (85MB chunks)
         run: |
           7z a -p"${{ github.event.inputs.zip_password }}" -mhe=on -mx=3 -v85m "sci-hub.ir_${{ steps.get_filename.outputs.original_name }}.7z" downloaded_file
           echo "Archive created successfully."
@@ -66,7 +66,7 @@ jobs:
       - name: Commit and Push chunks (up to 10 per batch)
         run: |
           # استفاده از Git commands برای مدیریت batch ها
-          chunks=(sci-hub.ir_${steps.get_filename.outputs.original_name}.7z.*)
+          chunks=("sci-hub.ir_${steps.get_filename.outputs.original_name}.7z".*)
           total=${#chunks[@]}
           batch_size=10
           start=0
